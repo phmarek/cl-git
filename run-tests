@@ -4,18 +4,19 @@
 (defun ~ (path)
   (merge-pathnames path (user-homedir-pathname)))
 
-(if (not (or (probe-file (~ ".quicklisp/setup.lisp"))
-             (probe-file (~ "quicklisp/setup.lisp"))))
+(defun quicklisp-path ()
+  (or (probe-file (~ ".quicklisp/setup.lisp"))
+      (probe-file (~ "quicklisp/setup.lisp"))))
+
+(if (not (quicklisp-path))
     (load "/usr/share/cl-quicklisp/quicklisp.lisp"))
 
-(if (not (or (probe-file (~ ".quicklisp/setup.lisp"))
-             (probe-file (~ "quicklisp/setup.lisp"))))
+(if (not (quicklisp-path))
     (quicklisp-quickstart:install)
-    (let ((quicklisp-init (or (probe-file (~ ".quicklisp/setup.lisp"))
-                              (probe-file (~ "quicklisp/setup.lisp")))))
-      (when (probe-file quicklisp-init)
-        (load quicklisp-init))))
+    (when (probe-file (quicklisp-path))
+      (load (quicklisp-path))))
 
+;; CFFI grovel is needed for cl-git.asd
 (ql:quickload 'cffi)
 
 (push (probe-file #p"./") asdf:*central-registry*)
@@ -44,7 +45,7 @@
     (print-usage-summary
      "Usage:~%~@{~A~%~}"
      '(((#\t "trace") nil "trace the functions during a test run.")))
-    (cl-user::quit :unix-status 1))
+    (uiop::quit :unix-status 1))
   (when trace
     (do-symbols (sym 'cl-git)
       (safe-trace sym "CL-GIT"))))

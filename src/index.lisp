@@ -109,6 +109,14 @@
   (index %index)
   (path :string))
 
+(defcfun ("git_index_add_frombuffer" %git-index-add-from-buffer)
+    %return-value
+  (index %index)
+  (entry %index-entry)
+  (buffer :string) ;; :pointer
+  (buffer-len :long))
+
+
 (defcfun ("git_index_clear" %git-index-clear)
     :void
   (index %index))
@@ -236,6 +244,21 @@ and 3 (theirs) are in conflict."
 
 (defmethod index-add-file ((entry list) (index index))
   (%git-index-add index entry))
+
+
+(defgeneric index-add-frombuffer (data index &rest index-entry-initargs)
+  (:documentation
+   "Adds DATA to INDEX."))
+
+(defmethod index-add-frombuffer ((data string) (index index) &rest index-entry-initargs)
+  (with-foreign-string ((bytes len) data)
+    (%git-index-add-from-buffer
+      index
+      index-entry-initargs
+      bytes
+      ;; Without the terminating 0 byte
+      (1- len))))
+
 
 (defgeneric index-clear (index)
   (:documentation "Clear contents of the INDEX removing all entries.

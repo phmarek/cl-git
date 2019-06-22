@@ -153,6 +153,7 @@
    ;; Index
    #:index
    #:index-add-file
+   #:index-add-frombuffer
    #:index-write
    #:index-entries
    #:index-to-tree

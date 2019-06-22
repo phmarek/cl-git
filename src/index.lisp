@@ -45,7 +45,7 @@
 
 (defcstruct (git-index-time :class index-time-struct-type)
   (seconds %time)
-  (nanoseconds :unsigned-int))
+  (nanoseconds :uint32))
 
 
 (defctype struct-index-time
@@ -55,15 +55,15 @@
 (defcstruct git-index-entry
   (ctime (:struct git-index-time))
   (mtime (:struct git-index-time))
-  (dev :unsigned-int)
-  (ino :unsigned-int)
+  (dev :uint32)
+  (ino :uint32)
   (mode git-file-mode)
-  (uid :unsigned-int)
-  (gid :unsigned-int)
-  (file-size off-t)
+  (uid :uint32)
+  (gid :uint32)
+  (file-size :uint32)
   (oid (:struct git-oid))
-  (flags :unsigned-short)
-  (flags-extended :unsigned-short)
+  (flags :uint16)
+  (flags-extended :uint16)
   (path :string))
 
 

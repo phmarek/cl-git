@@ -43,7 +43,7 @@
 
 (define-foreign-type time-type ()
   nil
-  (:actual-type :int64)
+  (:actual-type :int32)
   (:simple-parser %time))
 
 

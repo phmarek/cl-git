@@ -154,6 +154,8 @@ and 3 (theirs) are in conflict."
   (index %index)
   (position :unsigned-int))
 
+;; On error (eg. path not found) this gives a MEMORY-FAULT-ERROR on NULL.
+;; Should be caught!
 (defcfun ("git_index_get_bypath" %git-index-get-by-path)
     %index-entry
   (index %index)
